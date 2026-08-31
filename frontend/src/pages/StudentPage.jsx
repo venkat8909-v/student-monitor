@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-const BACKEND_HOST = window.location.hostname
-const WS_URL = `ws://${BACKEND_HOST}:8000/ws/student`
-const API_URL = `http://${BACKEND_HOST}:8000`
+// Change to (deployed)
+const WS_URL = `wss://http://student-monitor-production.up.railway.app/ws/student`
+const API_URL = `http://student-monitor-production.up.railway.app/`
 
 // ─── ICE servers (STUN only — works on local network) ──────────────────
 const ICE_SERVERS = [{ urls: 'stun:stun.l.google.com:19302' }]
