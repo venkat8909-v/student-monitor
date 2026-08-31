@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 
-const BACKEND_HOST = window.location.hostname
-const WS_URL = `ws://${BACKEND_HOST}:8000/ws/dashboard`
+const WS_URL = `ws://student-monitor-production.up.railway.app/ws/dashboard`
 const ICE_SERVERS = [{ urls: 'stun:stun.l.google.com:19302' }]
 const PAGE_SIZE = 15
 
