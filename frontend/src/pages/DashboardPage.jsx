@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 
-const WS_URL = `ws://student-monitor-production.up.railway.app/ws/dashboard`
+const WS_URL = `wss://student-monitor-production.up.railway.app/ws/dashboard`
 const ICE_SERVERS = [{ urls: 'stun:stun.l.google.com:19302' }]
 const PAGE_SIZE = 15
 
