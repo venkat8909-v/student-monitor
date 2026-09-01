@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 // Change to (deployed)
-const WS_URL = `wss://http://student-monitor-production.up.railway.app/ws/student`
-const API_URL = `http://student-monitor-production.up.railway.app/`
+const WS_URL = `wss://student-monitor-production.up.railway.app/ws/student`
+const API_URL = `https://student-monitor-production.up.railway.app`
 
 // ─── ICE servers (STUN only — works on local network) ──────────────────
 const ICE_SERVERS = [{ urls: 'stun:stun.l.google.com:19302' }]
