@@ -145,7 +145,7 @@ export default function DashboardPage() {
         {pageStudents.length === 0 ? (
           <div style={s.empty}>
             <p style={s.emptyTitle}>Waiting for students</p>
-            <p style={s.emptyHint}>Share <strong style={{ color: '#e6edf3' }}>http://{BACKEND_HOST}:3000</strong> with your students</p>
+            <p style={s.emptyHint}>Share <strong style={{ color: '#e6edf3' }}>https://student-monitor-tau.vercel.app</strong> with your students</p>
           </div>
         ) : (
           <div style={{
