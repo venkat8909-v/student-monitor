@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 const WS_URL = `wss://student-monitor-production.up.railway.app/ws/dashboard`
 const ICE_SERVERS = [{ urls: 'stun:stun.l.google.com:19302' }]
 const PAGE_SIZE = 15
 
 export default function DashboardPage() {
-  const [students, setStudents] = useState([])   // [{ roll_no, status }]
-  const [streams, setStreams] = useState({})       // roll_no -> MediaStream
+  const [students, setStudents] = useState([])
+  const [streams, setStreams] = useState({})
   const [page, setPage] = useState(0)
   const [wsReady, setWsReady] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const wsRef = useRef(null)
-  const peersRef = useRef({})   // roll_no -> RTCPeerConnection
+  const peersRef = useRef({})
 
-  // ─── Connect dashboard WebSocket ──────────────────────────────────
   useEffect(() => {
     const ws = new WebSocket(WS_URL)
     wsRef.current = ws
@@ -26,7 +26,6 @@ export default function DashboardPage() {
       if (msg.type === 'init' || msg.type === 'student_joined' || msg.type === 'student_left') {
         setStudents(msg.students || [])
 
-        // Request offer from any new student we don't have yet
         if (msg.type === 'student_joined' || msg.type === 'init') {
           for (const s of (msg.students || [])) {
             if (!peersRef.current[s.roll_no]) {
@@ -35,7 +34,6 @@ export default function DashboardPage() {
           }
         }
 
-        // Clean up peer for student who left
         if (msg.type === 'student_left') {
           const roll = msg.roll_no
           peersRef.current[roll]?.close()
@@ -48,7 +46,6 @@ export default function DashboardPage() {
         }
       }
 
-      // WebRTC signaling coming from student
       if (msg.type === 'offer') {
         await handleOffer(msg)
       }
@@ -66,12 +63,10 @@ export default function DashboardPage() {
     return () => ws.close()
   }, [])
 
-  // ─── Ask student to send us their stream ──────────────────────────
   function requestOffer(roll) {
     wsRef.current?.send(JSON.stringify({ type: 'request_offer', to: roll }))
   }
 
-  // ─── Handle incoming WebRTC offer from student ───────────────────
   async function handleOffer(msg) {
     const roll = msg.from
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS })
@@ -95,26 +90,22 @@ export default function DashboardPage() {
     wsRef.current?.send(JSON.stringify({ type: 'answer', to: roll, sdp: pc.localDescription }))
   }
 
-  // ─── Maximize: open student in new tab ────────────────────────────
   function openStudentFull(roll) {
     window.open(`/student-view?roll=${roll}`, `student_${roll}`, 'width=1280,height=800')
   }
 
-  // ─── Pagination ────────────────────────────────────────────────────
-  const totalPages = Math.max(1, Math.ceil(students.length / PAGE_SIZE))
-  const pageStudents = students.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
-
-  // ─── Copy shareable URL ───────────────────────────────────────────
   function copyLink() {
     const url = `https://student-monitor-tau.vercel.app`
     navigator.clipboard.writeText(url)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
-  
+
+  const totalPages = Math.max(1, Math.ceil(students.length / PAGE_SIZE))
+  const pageStudents = students.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+
   return (
     <div style={s.page}>
-      {/* Header */}
       <div style={s.header}>
         <div style={s.headerLeft}>
           <span style={s.dot} />
@@ -140,7 +131,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Grid */}
       <div style={s.gridWrap}>
         {pageStudents.length === 0 ? (
           <div style={s.empty}>
@@ -164,7 +154,6 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div style={s.pagination}>
           <button
@@ -189,7 +178,6 @@ export default function DashboardPage() {
   )
 }
 
-// ─── Individual student card ──────────────────────────────────────────
 function StudentCard({ roll, stream, onMaximize }) {
   const videoRef = useRef(null)
 
@@ -224,7 +212,6 @@ function StudentCard({ roll, stream, onMaximize }) {
   )
 }
 
-// ─── Styles ───────────────────────────────────────────────────────────
 const s = {
   page: { minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#0d1117' },
   header: {
