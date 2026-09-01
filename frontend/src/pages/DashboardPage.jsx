@@ -105,14 +105,13 @@ export default function DashboardPage() {
   const pageStudents = students.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
   // ─── Copy shareable URL ───────────────────────────────────────────
-  const [copied, setCopied] = useState(false)
   function copyLink() {
-    const url = `http://${BACKEND_HOST}:3000`
+    const url = `https://student-monitor-tau.vercel.app`
     navigator.clipboard.writeText(url)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
-
+  
   return (
     <div style={s.page}>
       {/* Header */}
