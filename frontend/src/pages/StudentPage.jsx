@@ -141,10 +141,10 @@ export default function StudentPage() {
             <h1 style={styles.title}>Join Session</h1>
             <p style={styles.subtitle}>Enter your roll number to begin. You will be asked to share your screen.</p>
             <input
-              style={{ ...styles.input, borderColor: error ? '#da3633' : '#30363d' }}
+              style={{ ...styles.input, borderColor: error ? '#da3633' : '#30363d', textTransform: 'uppercase' }}
               placeholder="e.g. 20A91A0481"
               value={inputVal}
-              onChange={e => { setInputVal(e.target.value); setError('') }}
+              onChange={e => { setInputVal(e.target.value.toUpperCase()); setError('') }}
               onKeyDown={e => e.key === 'Enter' && handleLogin()}
               autoFocus
             />
