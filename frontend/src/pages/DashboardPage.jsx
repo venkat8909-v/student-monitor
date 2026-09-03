@@ -145,7 +145,7 @@ const ALL_ROLL_NUMBERS = [
     "24B11DS220",
     "24B11CS167",
     "24B11CS174",
-    "24P31A42G8"
+    "24P31A42G8",
 ]
 
 export default function DashboardPage() {
